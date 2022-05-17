@@ -8,7 +8,7 @@ using namespace std;
 
 void print_menu() {
     cout << "-------------------------" << endl;
-    cout << "1. Add element(s)" << endl;
+    cout << "1. Add element" << endl;
     cout << "2. Delete element" << endl;
     cout << "3. Find element" << endl;
     cout << "4. Inorder traversal" << endl;
@@ -24,16 +24,25 @@ int main() {
     print_menu();
     stringstream ss;
     short cmd;
-    while (cin >> cmd) {
+    do {
+        cin >> cmd;
         switch (cmd) {
             case 1:
-                getline(cin, buffer);
-                getline(cin, buffer);
-                ss << buffer;
-                while (ss >> buf) {
-                    tree.insert(buf);
+                cout << "Enter element: ";
+                cin >> buf;
+                if (!cin.good()) {
+                    cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    cout << "Element must be number" << endl;
+                    print_menu();
+                    break;
                 }
-                cout << "Success" << endl;
+                else if (tree.search(buf)) {
+                    cout << "Element already exists" << endl;
+                    print_menu();
+                    break;
+                }
+                else tree.insert(buf);
                 print_menu();
                 break;
             case 2:
@@ -75,11 +84,13 @@ int main() {
                 }
                 print_menu();
                 break;
+            case 0:
+                break;
             default:
                 cout << "Invalid operation" << endl;
                 print_menu();
                 break;
         }
-    }
+    } while (cmd != 0);
     return 0;
 }
