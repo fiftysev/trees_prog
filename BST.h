@@ -40,6 +40,19 @@ public:
         return search(value, root);
     }
 
+    Node* next(int value) {
+        Node* current = root;
+        Node* successor = nullptr;
+        while (current != nullptr) {
+            if (value < current->key) {
+                successor = current;
+                current = current->left;
+            }
+            else current = current->right;
+        }
+        return successor;
+    }
+
     void preorder() {
         preorder(root);
     }

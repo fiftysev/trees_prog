@@ -14,6 +14,7 @@ void print_menu() {
     cout << "4. Inorder traversal" << endl;
     cout << "5. Preorder traversal" << endl;
     cout << "6. Postorder traversal" << endl;
+    cout << "7. Get next element" << endl;
     cout << "-------------------------" << endl;
 }
 
@@ -28,7 +29,7 @@ int main() {
         cin >> cmd;
         switch (cmd) {
             case 1:
-                cout << "Enter element: ";
+                cout << "Enter key: ";
                 cin >> buf;
                 if (!cin.good()) {
                     cin.clear();
@@ -49,7 +50,7 @@ int main() {
                 print_menu();
                 break;
             case 2:
-                cout << "Enter element to delete: ";
+                cout << "Enter key to delete: ";
                 cin >> buf;
                 if (!cin.good()) {
                     cin.clear();
@@ -94,6 +95,24 @@ int main() {
                     cout << endl;
                 }
                 print_menu();
+                break;
+            case 7:
+                cout << "Enter key: ";
+                cin >> buf;
+                Node* res;
+                if (tree.isTreeEmpty()) cout << "Exception: Tree is empty" << endl;
+                else if (!cin.good()) {
+                    cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    cout << "Element must be int" << endl;
+                    print_menu();
+                    break;
+                }
+                else {
+                    res = tree.next(buf);
+                    res == nullptr ? cout << "Next element is undefined" << endl : cout << res->key << endl;
+                    print_menu();
+                }
                 break;
             case 0:
                 break;
