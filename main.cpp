@@ -33,7 +33,7 @@ int main() {
                 if (!cin.good()) {
                     cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    cout << "Element must be number" << endl;
+                    cout << "Element must be int" << endl;
                     print_menu();
                     break;
                 }
@@ -42,12 +42,23 @@ int main() {
                     print_menu();
                     break;
                 }
-                else tree.insert(buf);
+                else {
+                    tree.insert(buf);
+                    cout << "Success" << endl;
+                }
                 print_menu();
                 break;
             case 2:
+                cout << "Enter element to delete: ";
                 cin >> buf;
-                if (!tree.deleteItem(buf)) cout << "Exception: Element is not found" << endl;
+                if (!cin.good()) {
+                    cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    cout << "Element must be int" << endl;
+                    print_menu();
+                    break;
+                }
+                else if (!tree.deleteItem(buf)) cout << "Exception: Element is not found" << endl;
                 else cout << "Success" << endl;
                 print_menu();
                 break;
