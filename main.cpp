@@ -1,134 +1,85 @@
 #include <iostream>
+#include <sstream>
+#include <map>
+#include "BST.h"
 
-typedef struct Node {
-    int key;
-    Node *left;
-    Node *right;
 
-    explicit Node(int value) {
-        key = value;
-        left = nullptr;
-        right = nullptr;
-    }
-} Node;
+using namespace std;
 
-class BST {
-public:
-    explicit BST() {
-        root = nullptr;
-    }
-
-    bool isEmpty(Node* n) {
-        return n == nullptr;
-    }
-
-    bool isTreeEmpty() {
-        return root == nullptr;
-    }
-
-    void insert(int value) {
-       root = insert(value, root);
-    }
-
-    void deleteItem(int value) {
-        if (!search(value, root)) {
-            std::cout << "Invalid operation: item doesn't exist" << std::endl;
-            return;
-        }
-        root = deleteNode(value, root);
-    }
-
-    Node* search(int value) {
-        return search(value, root);
-    }
-
-    void preorder() {
-        preorder(root);
-    }
-
-    void inorder() {
-        inorder(root);
-    }
-
-    void postorder() {
-        postorder(root);
-    }
-private:
-    Node *root;
-
-    Node* insert(int value, Node *node) {
-        if (node == nullptr) return new Node(value);
-        else if (value < node->key) node->left = insert(value, node->left);
-        else if (value > node-> key) node->right = insert(value, node->right);
-        return node;
-    }
-
-    Node* deleteNode(int value, Node *node) {
-        if (node == nullptr) return node;
-
-        if (value < node->key) node->left = deleteNode(value, node->left);
-
-        else if (value > node->key) node->right = deleteNode(value, node->right);
-
-        else if (node->right != nullptr && node->left != nullptr) {
-            node->key = min(node->right)->key;
-            node->right = deleteNode(node->key, node->right);
-        }
-        else {
-            if (node->left != nullptr) node = node->left;
-
-            else if (node->right != nullptr) node = node->right;
-
-            else node = nullptr;
-        }
-        return node;
-    }
-
-    Node* min(Node *n) {
-        if (n->left == nullptr) return n;
-        return min(n->left);
-    }
-
-    Node* max(Node *n) {
-        if (n->right == nullptr) return n;
-        return max(n->right);
-    }
-
-    Node* search(int value, Node *node) {
-        if (isEmpty(node)) return nullptr;
-        if (value == node->key) return node;
-        return value < node->key ? search(value, node->left) : search(value, node->right) ;
-    }
-
-    // Прямой
-    void preorder(Node *_root) {
-        if (_root) {
-            std::cout << _root->key << " ";
-            preorder(_root->left);
-            preorder(_root->right);
-        }
-    }
-
-    // Симметричный
-    void inorder(Node *_root) {
-        if (_root) {
-            inorder(_root->left);
-            std::cout << _root->key << " ";
-            inorder(_root->right);
-        }
-    }
-
-    // Обратный
-    void postorder(Node *_root) {
-        if (_root) {
-            postorder(_root->left);
-            postorder(_root->right);
-            std::cout << _root->key << " ";
-        }
-    }
-};
+void print_menu() {
+    cout << "-------------------------" << endl;
+    cout << "1. Add element(s)" << endl;
+    cout << "2. Delete element" << endl;
+    cout << "3. Find element" << endl;
+    cout << "4. Inorder traversal" << endl;
+    cout << "5. Preorder traversal" << endl;
+    cout << "6. Postorder traversal" << endl;
+    cout << "-------------------------" << endl;
+}
 
 int main() {
     BST tree = BST();
+    int buf;
+    string buffer;
+    print_menu();
+    stringstream ss;
+    short cmd;
+    while (cin >> cmd) {
+        switch (cmd) {
+            case 1:
+                getline(cin, buffer);
+                getline(cin, buffer);
+                ss << buffer;
+                while (ss >> buf) {
+                    tree.insert(buf);
+                }
+                cout << "Success" << endl;
+                print_menu();
+                break;
+            case 2:
+                cin >> buf;
+                if (!tree.deleteItem(buf)) cout << "Exception: Element is not found" << endl;
+                else cout << "Success" << endl;
+                print_menu();
+                break;
+            case 3:
+                cin >> buf;
+                if (tree.isTreeEmpty()) cout << "Exception: Tree is empty" << endl;
+                else if (!tree.search(buf)) cout << "Element is not found" << endl;
+                else cout << "Element is found" << endl;
+                break;
+            case 4:
+                if (tree.isTreeEmpty()) cout << "Exception: Tree is empty" << endl;
+                else {
+                    cout << "Inorder traversal: ";
+                    tree.inorder();
+                    cout << endl;
+                }
+                print_menu();
+                break;
+            case 5:
+                if (tree.isTreeEmpty()) cout << "Exception: Tree is empty" << endl;
+                else {
+                    cout << "Preorder traversal: ";
+                    tree.preorder();
+                    cout << endl;
+                }
+                print_menu();
+                break;
+            case 6:
+                if (tree.isTreeEmpty()) cout << "Exception: Tree is empty" << endl;
+                else {
+                    cout << "Postorder traversal: ";
+                    tree.postorder();
+                    cout << endl;
+                }
+                print_menu();
+                break;
+            default:
+                cout << "Invalid operation" << endl;
+                print_menu();
+                break;
+        }
+    }
     return 0;
 }

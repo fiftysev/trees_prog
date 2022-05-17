@@ -3,4 +3,4 @@ project(trees)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(trees main.cpp)
+add_executable(trees main.cpp BST.h)
