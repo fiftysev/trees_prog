@@ -22,9 +22,12 @@ public:
         return n == nullptr;
     }
 
+    bool isTreeEmpty() {
+        return root == nullptr;
+    }
+
     void insert(int value) {
-        if (root != nullptr) insert(value, root);
-        else root = new Node(value);
+       root = insert(value, root);
     }
 
     void deleteItem(int value) {
@@ -53,39 +56,29 @@ public:
 private:
     Node *root;
 
-    void insert(int value, Node *node) {
-        if (value < node->key) {
-            if (node->left != nullptr) insert(value, node->left);
-            else node->left = new Node(value);
-            return;
-        } else if (value > node->key) {
-            if (node->right != nullptr) insert(value, node->right);
-            else node->right = new Node(value);
-        }
+    Node* insert(int value, Node *node) {
+        if (node == nullptr) return new Node(value);
+        else if (value < node->key) node->left = insert(value, node->left);
+        else if (value > node-> key) node->right = insert(value, node->right);
+        return node;
     }
 
     Node* deleteNode(int value, Node *node) {
         if (node == nullptr) return node;
 
-        if (value < node->key) {
-            node->left = deleteNode(value, node->left);
-        }
-        else if (value > node->key) {
-            node->right = deleteNode(value, node->right);
-        }
+        if (value < node->key) node->left = deleteNode(value, node->left);
+
+        else if (value > node->key) node->right = deleteNode(value, node->right);
 
         else if (node->right != nullptr && node->left != nullptr) {
             node->key = min(node->right)->key;
             node->right = deleteNode(node->key, node->right);
         }
-
         else {
-            if (node->left != nullptr) {
-                node = node->left;
-            }
-            else if (node->right != nullptr) {
-                node = node->right;
-            }
+            if (node->left != nullptr) node = node->left;
+
+            else if (node->right != nullptr) node = node->right;
+
             else node = nullptr;
         }
         return node;
@@ -107,6 +100,7 @@ private:
         return value < node->key ? search(value, node->left) : search(value, node->right) ;
     }
 
+    // Прямой
     void preorder(Node *_root) {
         if (_root) {
             std::cout << _root->key << " ";
@@ -115,18 +109,20 @@ private:
         }
     }
 
+    // Симметричный
     void inorder(Node *_root) {
         if (_root) {
-            preorder(_root->left);
+            inorder(_root->left);
             std::cout << _root->key << " ";
-            preorder(_root->right);
+            inorder(_root->right);
         }
     }
 
+    // Обратный
     void postorder(Node *_root) {
         if (_root) {
-            preorder(_root->left);
-            preorder(_root->right);
+            postorder(_root->left);
+            postorder(_root->right);
             std::cout << _root->key << " ";
         }
     }
@@ -134,8 +130,5 @@ private:
 
 int main() {
     BST tree = BST();
-    for (int i = 0; i < 10; i++) {
-        tree.insert(i);
-    }
     return 0;
 }
