@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 typedef struct Node {
     int key;

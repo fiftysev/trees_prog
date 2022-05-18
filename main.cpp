@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <map>
+#include <vector>
 #include "BST.h"
 
 
@@ -18,34 +19,43 @@ void print_menu() {
     cout << "-------------------------" << endl;
 }
 
+vector<int> get_input(const string& s) {
+    vector<int> v;
+    int buf;
+    istringstream ss;
+    ss.clear();
+    ss.str(s);
+    while (ss >> buf || !ss.eof()) {
+        if (ss.fail()) {
+            ss.clear();
+            std::string trash;
+            ss >> trash;
+            continue;
+        }
+        v.push_back(buf);
+    }
+    return v;
+}
+
 int main() {
     BST tree = BST();
     int buf;
     string buffer;
     print_menu();
     stringstream ss;
+    vector<int> data;
     short cmd;
     do {
         cin >> cmd;
         switch (cmd) {
             case 1:
-                cout << "Enter key: ";
-                cin >> buf;
-                if (!cin.good()) {
-                    cin.clear();
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    cout << "Element must be int" << endl;
-                    print_menu();
-                    break;
-                }
-                else if (tree.search(buf)) {
-                    cout << "Element already exists" << endl;
-                    print_menu();
-                    break;
-                }
-                else {
-                    tree.insert(buf);
-                    cout << "Success" << endl;
+                cout << "Enter key(s) (to break input enter any letter):" << endl;
+                getline(cin >> ws, buffer);
+                data = get_input(buffer);
+                for (auto v : data) {
+                    cout << v << " ";
+                    tree.search(v) ? cout << "Already exists" << endl : cout << "Inserted" << endl;
+                    tree.insert(v);
                 }
                 print_menu();
                 break;
@@ -55,19 +65,31 @@ int main() {
                 if (!cin.good()) {
                     cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    cout << "Element must be int" << endl;
+                    cout << "Value must be int" << endl;
                     print_menu();
                     break;
                 }
+                else if (tree.isTreeEmpty()) cout << "Exception: Tree is empty" << endl;
                 else if (!tree.deleteItem(buf)) cout << "Exception: Element is not found" << endl;
                 else cout << "Success" << endl;
                 print_menu();
                 break;
             case 3:
+                cout << "Enter key: ";
                 cin >> buf;
-                if (tree.isTreeEmpty()) cout << "Exception: Tree is empty" << endl;
+                if (!cin.good()) {
+                    cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    cout << "Key must be int" << endl;
+                    print_menu();
+                    break;
+                }
+                if (tree.isTreeEmpty()) {
+                    cout << "Exception: Tree is empty" << endl;
+                }
                 else if (!tree.search(buf)) cout << "Element is not found" << endl;
                 else cout << "Element is found" << endl;
+                print_menu();
                 break;
             case 4:
                 if (tree.isTreeEmpty()) cout << "Exception: Tree is empty" << endl;
