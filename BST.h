@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <utility>
 
 typedef struct Node {
     int key;
@@ -12,6 +13,16 @@ typedef struct Node {
         right = nullptr;
     }
 } Node;
+
+typedef struct Trunk {
+    Trunk *prev;
+    std::string str;
+
+    Trunk(Trunk *prev, std::string str) {
+        this->prev = prev;
+        this->str = std::move(str);
+    }
+} Trunk;
 
 class BST {
 public:
@@ -64,6 +75,10 @@ public:
 
     void postorder() {
         postorder(root);
+    }
+
+    void pretty_print() {
+        printTree(root, nullptr, false);
     }
 private:
     Node *root;
@@ -137,5 +152,43 @@ private:
             postorder(_root->right);
             std::cout << _root->key << " ";
         }
+    }
+
+    void showTrunks(Trunk *p)
+    {
+        if (p == nullptr) return;
+
+        showTrunks(p->prev);
+        std::cout << p->str;
+    }
+
+    void printTree(Node* node, Trunk *prev, bool isLeft)
+    {
+        if (node == nullptr) return;
+
+        std::string prev_str = "    ";
+        auto *trunk = new Trunk(prev, prev_str);
+
+        printTree(node->right, trunk, true);
+
+        if (!prev) trunk->str = "---";
+        else if (isLeft) {
+            trunk->str = "+---";
+            prev_str = "   |";
+        }
+        else {
+            trunk->str = "*---";
+            prev->str = prev_str;
+        }
+
+        showTrunks(trunk);
+        std::cout << " " << node->key << std::endl;
+
+        if (prev) {
+            prev->str = prev_str;
+        }
+
+        trunk->str = "   |";
+        printTree(node->left, trunk, false);
     }
 };

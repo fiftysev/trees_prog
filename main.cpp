@@ -11,11 +11,13 @@ void print_menu() {
     cout << "-------------------------" << endl;
     cout << "1. Add element" << endl;
     cout << "2. Delete element" << endl;
-    cout << "3. Find element" << endl;
-    cout << "4. Inorder traversal" << endl;
-    cout << "5. Preorder traversal" << endl;
-    cout << "6. Postorder traversal" << endl;
-    cout << "7. Get next element" << endl;
+    cout << "3. Clear tree data" << endl;
+    cout << "4. Find element" << endl;
+    cout << "5. Inorder traversal" << endl;
+    cout << "6. Preorder traversal" << endl;
+    cout << "7. Postorder traversal" << endl;
+    cout << "8. Get next element" << endl;
+    cout << "9. Pretty print" << endl;
     cout << "-------------------------" << endl;
 }
 
@@ -28,8 +30,7 @@ vector<int> get_input(const string& s) {
     while (ss >> buf || !ss.eof()) {
         if (ss.fail()) {
             ss.clear();
-            std::string trash;
-            ss >> trash;
+            ss.ignore(1);
             continue;
         }
         v.push_back(buf);
@@ -52,6 +53,7 @@ int main() {
                 cout << "Enter key(s) (to break input enter any letter):" << endl;
                 getline(cin >> ws, buffer);
                 data = get_input(buffer);
+                if (data.empty()) cout << "Invalid input or process terminated" << endl;
                 for (auto v : data) {
                     cout << v << " ";
                     tree.search(v) ? cout << "Already exists" << endl : cout << "Inserted" << endl;
@@ -75,6 +77,11 @@ int main() {
                 print_menu();
                 break;
             case 3:
+                cout << "Tree data cleared" << endl;
+                tree = BST();
+                print_menu();
+                break;
+            case 4:
                 cout << "Enter key: ";
                 cin >> buf;
                 if (!cin.good()) {
@@ -91,7 +98,7 @@ int main() {
                 else cout << "Element is found" << endl;
                 print_menu();
                 break;
-            case 4:
+            case 5:
                 if (tree.isTreeEmpty()) cout << "Exception: Tree is empty" << endl;
                 else {
                     cout << "Inorder traversal: ";
@@ -100,7 +107,7 @@ int main() {
                 }
                 print_menu();
                 break;
-            case 5:
+            case 6:
                 if (tree.isTreeEmpty()) cout << "Exception: Tree is empty" << endl;
                 else {
                     cout << "Preorder traversal: ";
@@ -109,7 +116,7 @@ int main() {
                 }
                 print_menu();
                 break;
-            case 6:
+            case 7:
                 if (tree.isTreeEmpty()) cout << "Exception: Tree is empty" << endl;
                 else {
                     cout << "Postorder traversal: ";
@@ -118,7 +125,7 @@ int main() {
                 }
                 print_menu();
                 break;
-            case 7:
+            case 8:
                 cout << "Enter key: ";
                 cin >> buf;
                 Node* res;
@@ -135,6 +142,11 @@ int main() {
                     res == nullptr ? cout << "Next element is undefined" << endl : cout << res->key << endl;
                     print_menu();
                 }
+                break;
+            case 9:
+                if (tree.isTreeEmpty()) cout << "Exception: Tree is empty" << endl;
+                else tree.pretty_print();
+                print_menu();
                 break;
             case 0:
                 break;
